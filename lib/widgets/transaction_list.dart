@@ -15,11 +15,12 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  Container(
-      height: 500,  // imisatvis rom listView-ze ar daerorrdes aucilebelia simaglis gatsera
-      // conditional rendering
+      // height: 500,  // imisatvis rom listView-ze ar daerorrdes aucilebelia simaglis gatsera
+      height: MediaQuery.of(context).size.height * 0.8,
+      // ----- conditional rendering ------
       child: transactions.isEmpty ? 
         Container(
-          height: 400,
+          // height: MediaQuery.of(context).size.height * 1,
           width: double.infinity,
           child: Text("charts not defaind yet!"),
           decoration: BoxDecoration(
@@ -30,42 +31,49 @@ class TransactionList extends StatelessWidget {
           ),
         )
       : 
-        ListView.builder(
+        ListView.builder(  // renders only that item wich shows on display
           itemCount: transactions.length,
           itemBuilder: (context, i) {
-            return Card(  // single transaction
+            return Card(  // single transaction card
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(  // marcxena mxare
-                    margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                    padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Theme.of(context).primaryColor, 
-                        width: 2
-                      )
-                    ),
-                    child: Text(
-                      '\$ ${transactions[i].amount.toStringAsFixed(2)}',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                  ),
-                  Column(  // marjvena mxare
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
                     children: [
-                      Text(
-                        transactions[i].title,
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      Container(  // marcxena mxare
+                        margin: EdgeInsets.all(10),
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          // boxShadow: [BoxShadow(color: Colors.black)],
+                          border: Border.all(
+                            color: Theme.of(context).primaryColor, 
+                            width: 2
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(10))
+                        ),
+                        child: Text(
+                          '\$ ${transactions[i].amount.toStringAsFixed(2)}',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
                       ),
-                      Text(
-                        DateFormat().format(transactions[i].date),
-                        style: TextStyle(color: Colors.grey),
-                      )
+                      Column(  // marjvena mxare
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            transactions[i].title,
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            DateFormat("yyyy-MM-dd hh:mm").format(transactions[i].date),
+                            style: TextStyle(color: Colors.grey),
+                          )
+                        ],
+                      ),
                     ],
                   ),
                   IconButton(

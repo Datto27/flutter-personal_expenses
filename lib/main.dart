@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:personal_expenses/widgets/chart.dart';
@@ -7,8 +8,14 @@ import './widgets/new_transaction.dart';
 
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp(
     MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(  // global
         primarySwatch: Colors.blue,
         accentColor: Colors.amber,
@@ -30,6 +37,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool _showChart = false;
 
   List _userTransactions = [
     Transaction(
@@ -83,9 +91,14 @@ class _HomePageState extends State<HomePage> {
       );
     });
   }
+  
 
   @override
   Widget build(BuildContext context) {
+    // final - not rebild this on every render
+    // check if display is in landscape mode and use it for show chart
+    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+   
     return Scaffold(
       appBar: AppBar(
         title: Text("myApp", style: TextStyle(fontWeight: FontWeight.bold),),
@@ -93,20 +106,40 @@ class _HomePageState extends State<HomePage> {
           IconButton(icon: Icon(Icons.add), onPressed: () {},)
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          // mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Chart(_recentTransactions),
-            TransactionList(_userTransactions, _deleteTransaction),
-          ],
-        )
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            // mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (isLandscape) Row(  // toggle bar
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Show Chart"),
+                  Switch(
+                    value: _showChart, 
+                    onChanged: (value) => setState(() {
+                      _showChart = value;
+                    }),
+                  ),
+                ]
+              ),
+              // conditional rendering : chart or transaction list
+              if (!isLandscape || _showChart) Container(
+                // height: (MediaQuery.of(context).size.height - AppBar().preferredSize.height) * 0.4,
+                child: Chart(_recentTransactions),
+              ),
+              TransactionList(_userTransactions, _deleteTransaction),
+            ],
+          )
+        ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: Theme.of(context).primaryColor,
-        onPressed: () => _showAddTransaction(context),
+      floatingActionButton: false // Platform.isIOS
+      ? Container(child: Text(""),)
+      : FloatingActionButton(
+          child: Icon(Icons.add, color: Colors.white,),
+          backgroundColor: Theme.of(context).primaryColor,
+          onPressed: () => _showAddTransaction(context),
       ),
     );
   }

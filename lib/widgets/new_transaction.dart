@@ -53,54 +53,62 @@ class _NewTransactionState extends State<NewTransaction> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          TextField(
-            decoration: InputDecoration(labelText: "Title"),
-            // onChanged: (val) => titleInput = val,
-            controller: _titleController,
-            onSubmitted: (_) => submitData, 
-          ),
-          TextField(
-            decoration: InputDecoration(labelText: "Amount"),
-            // onChanged: (val) => amountInput = val,
-            controller: _amountController,
-            keyboardType: TextInputType.number,
-            onSubmitted: (_) => submitData,
-          ),
-          Container(
-            height: 80,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(_selectedDate == null ? 
-                  "No date choosen!" :
-                  DateFormat.yMd().format(_selectedDate).toString()
-                ),
-                RaisedButton(
-                  child: Text("Choose Date", style: TextStyle(fontWeight: FontWeight.bold),),
-                  textColor: Theme.of(context).primaryColor,
-                  onPressed: () => _presentDatePicker(context),
-                )
-              ],
+    return SingleChildScrollView(
+      child: Container(
+        // margin: EdgeInsets.all(10),
+        padding: EdgeInsets.only(
+          top: 10,
+          left: 10,
+          right: 10,
+          bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            TextField(
+              decoration: InputDecoration(labelText: "Title"),
+              // onChanged: (val) => titleInput = val,
+              controller: _titleController,
+              onSubmitted: (_) => submitData, 
             ),
-          ),
-          FlatButton(
-            child: Text("Add Transaction", style: TextStyle(fontWeight: FontWeight.bold),),
-            textColor: Colors.white,
-            color: Theme.of(context).primaryColor,
-            onPressed: submitData,
-            // () {
-            //   // print("${titleInput} ${amountInput}");
-            //   // print("${titleController.text} ${amountController.text}");
-            //   addTransaction(titleController.text, double.parse(amountController.text));
-            // },
-          )
-        ],
-      )
+            TextField(
+              decoration: InputDecoration(labelText: "Amount"),
+              // onChanged: (val) => amountInput = val,
+              controller: _amountController,
+              keyboardType: TextInputType.number,
+              onSubmitted: (_) => submitData,
+            ),
+            Container(
+              height: 80,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(_selectedDate == null ? 
+                    "No date choosen!" :
+                    DateFormat.yMd().format(_selectedDate).toString()
+                  ),
+                  RaisedButton(
+                    child: Text("Choose Date", style: TextStyle(fontWeight: FontWeight.bold),),
+                    textColor: Theme.of(context).primaryColor,
+                    onPressed: () => _presentDatePicker(context),
+                  )
+                ],
+              ),
+            ),
+            FlatButton(
+              child: Text("Add Transaction", style: TextStyle(fontWeight: FontWeight.bold),),
+              textColor: Colors.white,
+              color: Theme.of(context).primaryColor,
+              onPressed: submitData,
+              // () {
+              //   // print("${titleInput} ${amountInput}");
+              //   // print("${titleController.text} ${amountController.text}");
+              //   addTransaction(titleController.text, double.parse(amountController.text));
+              // },
+            )
+          ],
+        )
+      ),
     );
   }
 }

@@ -7,7 +7,7 @@ class Chart extends StatelessWidget {
   final List recentTransactions;
   Chart(this.recentTransactions);
 
-  // transactions dalageba dgeebis mixedvit
+  // transactions dalageba dgeebis mixedvit nav barshi
   List<Map> get groupedTransactionValues {
     // ganvlili shvidi dgis sia da misi monacemebi
     return List.generate(7, (index) {  // 7 elementiani listis shemqmna
